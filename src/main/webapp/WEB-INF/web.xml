@@ -4,4 +4,21 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+
+  <servlet>
+    <servlet-name>IndexServlet</servlet-name>
+    <servlet-class>ru.job4j.servlet.IndexServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CloseTaskServlet</servlet-name>
+    <servlet-class>ru.job4j.servlet.CloseTaskServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>IndexServlet</servlet-name>
+    <url-pattern>/index.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CloseTaskServlet</servlet-name>
+    <url-pattern>/closetask.do</url-pattern>
+  </servlet-mapping>
 </web-app>
