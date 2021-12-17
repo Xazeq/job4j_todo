@@ -49,8 +49,7 @@ function addItem() {
         type: 'POST',
         url: 'http://localhost:8080/todo/index.do',
         data: {
-            description : $('#desc').val(),
-            isDone : false
+            description : $('#desc').val()
         }
     }).done(function () {
         getItems();

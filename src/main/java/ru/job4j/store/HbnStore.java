@@ -15,6 +15,9 @@ public class HbnStore implements Store {
     private final SessionFactory sf = new MetadataSources(registry)
             .buildMetadata().buildSessionFactory();
 
+    private HbnStore() {
+    }
+
     private static final class Lazy {
         private static final Store INST = new HbnStore();
     }
@@ -57,12 +60,13 @@ public class HbnStore implements Store {
     public Item replace(int id) {
         Session session = sf.openSession();
         session.beginTransaction();
-        Item editItem = findById(id);
-        editItem.setDone(true);
-        session.update(editItem);
+        session.createQuery("update ru.job4j.model.Item set isDone = true where id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
         session.getTransaction().commit();
+        Item item = session.get(Item.class, id);
         session.close();
-        return editItem;
+        return item;
     }
 
     @Override

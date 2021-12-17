@@ -20,7 +20,6 @@ public class IndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; character=utf-8");
         boolean check = Boolean.parseBoolean(req.getParameter("checkbox"));
-        System.out.println(check);
         OutputStream out = resp.getOutputStream();
         String json = "";
         if (check) {
@@ -36,7 +35,6 @@ public class IndexServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String desc = req.getParameter("description");
-        boolean isDone = Boolean.parseBoolean(req.getParameter("isDone"));
-        HbnStore.instOf().add(new Item(desc, isDone));
+        HbnStore.instOf().add(new Item(desc, false));
     }
 }
