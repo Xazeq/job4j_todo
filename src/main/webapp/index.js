@@ -8,12 +8,15 @@ function validate() {
 
 function getItems() {
     let check = document.getElementById('checkbox');
+    let username = window.localStorage.getItem('user');
+    document.getElementById('exit').innerText = username + ' | Выход';
     $.ajax({
         type: 'GET',
         url: 'http://localhost:8080/todo/index.do',
         dataType: 'json',
         data: {
-            checkbox: check.checked
+            checkbox: check.checked,
+            username : username
         }
     }).done(function (data) {
         $('#tableBodyId tr').remove();
@@ -45,11 +48,13 @@ function addItem() {
     if (!validate()) {
         return false;
     }
+    let username = window.localStorage.getItem('user');
     $.ajax({
         type: 'POST',
         url: 'http://localhost:8080/todo/index.do',
         data: {
-            description : $('#desc').val()
+            description : $('#desc').val(),
+            username : username
         }
     }).done(function () {
         getItems();

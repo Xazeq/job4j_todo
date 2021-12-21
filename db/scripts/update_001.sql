@@ -1,7 +1,15 @@
-create table if not exists items
+CREATE TABLE if NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username varchar NOT NULL UNIQUE,
+    email varchar NOT NULL UNIQUE,
+    password varchar NOT NULL UNIQUE
+);
+
+CREATE TABLE if NOT EXISTS items
 (
-    id serial primary key,
+    id SERIAL PRIMARY KEY,
     description text,
     created timestamp,
-    isDone boolean
+    isDone boolean,
+    user_id int REFERENCES users(id)
 );
