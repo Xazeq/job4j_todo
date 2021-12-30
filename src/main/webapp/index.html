@@ -29,6 +29,7 @@
 <script>
     $(document).ready(function () {
         getItems();
+        getCategories();
     });
 </script>
 
@@ -50,6 +51,12 @@
                         <input type="text" class="form-control" name="desc" id="desc"
                                title="Поле Описание не заполнено">
                     </div>
+                    <div class="form-select">
+                        <label for="cIds">Категории</label>
+                        <select class="form-control" name="cIds" id="cIds" multiple>
+                        </select>
+                    </div>
+                    <br>
                     <button type="button" class="btn btn-primary" onclick="addItem()">Добавить</button>
                 </form>
             </div>
@@ -61,7 +68,8 @@
         <table class="table" id="table">
             <thead>
             <tr>
-                <th scope="col" style="width: 80%">Описание</th>
+                <th scope="col" style="width: 65%">Описание</th>
+                <th scope="col" style="width: 15%; text-align: center">Категории</th>
                 <th scope="col" style="width: 10%; text-align: center">Статус</th>
                 <th scope="col" style="width: 10%; text-align: center">Действие</th>
             </tr>

@@ -8,6 +8,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.model.Category;
 import ru.job4j.model.Item;
 import ru.job4j.model.User;
 
@@ -51,6 +52,18 @@ public class HbnStore implements Store {
     @Override
     public Item add(Item item) {
         return this.tx(session -> {
+            session.save(item);
+            return item;
+        });
+    }
+
+    @Override
+    public Item add(Item item, String[] ids) {
+        return this.tx(session -> {
+            for (var id : ids) {
+                Category category = session.find(Category.class, Integer.parseInt(id));
+                item.addCategory(category);
+            }
             session.save(item);
             return item;
         });
@@ -115,7 +128,9 @@ public class HbnStore implements Store {
 
     @Override
     public List<Item> findAllItemsByUser(User user) {
-        return this.tx(session -> session.createQuery("from ru.job4j.model.Item where user = :user")
+        return this.tx(session -> session.createQuery("select distinct i from ru.job4j.model.Item i "
+                        + "join fetch i.categories "
+                        + "where i.user = :user")
                 .setParameter("user", user)
                 .list());
     }
@@ -123,8 +138,17 @@ public class HbnStore implements Store {
     @Override
     public List<Item> findNotDoneItemsByUser(User user) {
         return this.tx(
-                session -> session.createQuery("from ru.job4j.model.Item where isDone = false AND user = :user")
+                session -> session.createQuery("select distinct i from ru.job4j.model.Item i "
+                                + "join fetch i.categories "
+                                + "where i.isDone = false AND i.user = :user")
                 .setParameter("user", user)
                 .list());
+    }
+
+    @Override
+    public List<Category> findAllCategories() {
+        return this.tx(
+                session -> session.createQuery("from ru.job4j.model.Category").list()
+        );
     }
 }

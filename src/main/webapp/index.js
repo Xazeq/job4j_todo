@@ -28,6 +28,11 @@ function getItems() {
             let done = item['isDone'];
             let status;
             let button;
+            let categories = item['categories'];
+            let itemCat = "";
+            categories.forEach(function(cat) {
+                itemCat += cat.name + '<br/>';
+            });
             if (done === true) {
                 button = '';
                 status = '<i class="fa fa-check-circle-o fa-2x" style="color:green"></i>'
@@ -36,6 +41,7 @@ function getItems() {
                 status = '<i class="fa fa-circle-o fa-2x" style="color:red"></i>'
             }
             $('#table tbody').append('<tr><td>' + desc + '</td>'
+                + '<td style="text-align: center">' + itemCat + '</td>'
                 + '<td style="text-align: center">' + status + '</td>'
                 + '<td>' + button + '</td></tr>');
         }
@@ -54,10 +60,16 @@ function addItem() {
         url: 'http://localhost:8080/todo/index.do',
         data: {
             description : $('#desc').val(),
-            username : username
+            username : username,
+            categories : $('#cIds').val()
+        },
+        dataType: 'text'
+    }).done(function (data) {
+        if (data === '400') {
+            alert('Выберите категорию!');
+        } else {
+            getItems();
         }
-    }).done(function () {
-        getItems();
     }).fail(function (err) {
         console.log(err);
     });
@@ -77,3 +89,21 @@ function closeTask(id) {
     });
 }
 
+function getCategories() {
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/todo/category.do',
+        dataType: 'json'
+    }).done(function (data) {
+        let select = document.getElementById('cIds');
+        for (let i = 0; i < data.length; i++) {
+            let cat = data[i];
+            $('#cIds').append($('<option>', {
+                value: cat.id,
+                text: cat.name,
+            }));
+        }
+    }).fail(function (err) {
+        console.log(err);
+    });
+}

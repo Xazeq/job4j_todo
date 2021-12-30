@@ -37,7 +37,15 @@ public class IndexServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String desc = req.getParameter("description");
+        String[] categoriesId = req.getParameterValues("categories[]");
         User user = (User) req.getSession().getAttribute("user");
-        HbnStore.instOf().add(new Item(desc, false, user));
+        if (categoriesId == null) {
+            OutputStream out = resp.getOutputStream();
+            out.write("400".getBytes(StandardCharsets.UTF_8));
+            out.flush();
+            out.close();
+        } else {
+            HbnStore.instOf().add(new Item(desc, false, user), categoriesId);
+        }
     }
 }
