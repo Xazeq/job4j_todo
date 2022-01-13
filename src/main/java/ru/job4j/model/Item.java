@@ -1,7 +1,7 @@
 package ru.job4j.model;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -13,7 +13,8 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String description;
-    private final LocalDateTime created = LocalDateTime.now();
+    @Temporal(TemporalType.TIMESTAMP)
+    private final Date created = new Date(System.currentTimeMillis());
     private boolean isDone;
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -72,7 +73,7 @@ public class Item {
         this.description = description;
     }
 
-    public LocalDateTime getCreated() {
+    public Date getCreated() {
         return created;
     }
 
